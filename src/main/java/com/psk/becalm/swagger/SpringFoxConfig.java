@@ -15,7 +15,7 @@ public class SpringFoxConfig {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("api"))
+                .apis(RequestHandlerSelectors.basePackage("com.psk.becalm.api"))
                 .paths(PathSelectors.any())
                 .build();
     }

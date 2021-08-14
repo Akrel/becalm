@@ -13,8 +13,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
-
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -32,12 +30,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http.csrf().disable();
-//       // http.authorizeRequests().anyRequest().permitAll();
-//        http.authorizeRequests().antMatchers("/").permitAll();
-//        http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
-
-        http.csrf().disable().authorizeRequests().anyRequest().permitAll();
+        http.csrf().disable();
+        http.authorizeRequests().antMatchers("/auth/**").permitAll();
+        http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
+        //  http.csrf().disable().authorizeRequests().anyRequest().permitAll();
     }
 
     @Bean
@@ -47,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web) {
         web.ignoring().antMatchers("/v2/api-docs",
                 "/configuration/ui",
                 "/swagger-resources/**",

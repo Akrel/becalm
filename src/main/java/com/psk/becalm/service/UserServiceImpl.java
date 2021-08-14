@@ -2,11 +2,10 @@ package com.psk.becalm.service;
 
 import com.psk.becalm.model.entities.AppUser;
 import com.psk.becalm.model.entities.Role;
+import com.psk.becalm.model.entities.RoleUserEnum;
 import com.psk.becalm.model.repository.RoleRepository;
 import com.psk.becalm.model.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,7 +32,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         AppUser user = userOptional.orElseThrow(() -> new RuntimeException("sda"));
 
-        return new User(user.getEmail(), user.getPassword(), Collections.singleton(new SimpleGrantedAuthority(user.getRole().getName())));
+        return new User(user.getEmail(), user.getPassword(), Collections.singleton(new SimpleGrantedAuthority(user.getRole().getRole().toString())));
     }
 
     @Override
@@ -45,7 +44,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public void addRoleToUser(String email, String roleName) throws Exception {
         AppUser user = userRepository.findByEmail(email).orElseThrow(() -> new Exception("User not found"));
-        Role role = roleRepository.findByName(roleName);
+        Role role = roleRepository.findByRole(RoleUserEnum.valueOf(roleName));
         user.setRole(role);
     }
 

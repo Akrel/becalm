@@ -10,15 +10,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/auth")
 @RequiredArgsConstructor
-@RequestMapping("/api")
 public class UserApi {
     private final UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<AppUser> userApiResponseEntity(@RequestBody AppUser user) {
+    public ResponseEntity<AppUser> userApiResponseEntity(@RequestBody AppUser appUser) {
         System.out.println("");
-        return ResponseEntity.ok(userService.saveUser(user));
+        return ResponseEntity.ok(userService.saveUser(null));
+    }
+
+
+    @PostMapping("/login")
+    public ResponseEntity<AppUser> loginApiUser() {
+        System.out.println("");
+        return ResponseEntity.ok(userService.saveUser(null));
     }
 
 }
