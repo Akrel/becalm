@@ -1,9 +1,7 @@
 package com.psk.becalm.api;
 
 import com.psk.becalm.model.entities.AppUser;
-import com.psk.becalm.service.UserService;
 import com.psk.becalm.transport.converters.AppUserConverter;
-import com.psk.becalm.transport.dto.model.AppUserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,22 +10,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/view")
 @RequiredArgsConstructor
-public class UserApi {
-    private final UserService userService;
+public class View {
 
     @PostMapping("/register")
-    public ResponseEntity<AppUser> userApiResponseEntity(@RequestBody AppUserDto appUser) {
+    public ResponseEntity<?> userApiResponseEntity() {
         System.out.println("");
-        return ResponseEntity.ok(userService.saveUser(AppUserConverter.toEntity(appUser)));
+
+        return ResponseEntity.ok("a");
     }
-
-
-    @PostMapping("/login")
-    public ResponseEntity<AppUser> loginApiUser() {
-        System.out.println("");
-        return ResponseEntity.ok(userService.saveUser(null));
-    }
-
 }

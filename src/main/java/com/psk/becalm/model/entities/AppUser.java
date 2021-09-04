@@ -1,8 +1,6 @@
 package com.psk.becalm.model.entities;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -10,6 +8,8 @@ import javax.persistence.*;
 @Setter
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,5 +19,5 @@ public class AppUser {
     private String password;
     private String email;
     @ManyToOne
-    private Role role;
+    private Role userRole;
 }

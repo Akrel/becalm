@@ -1,5 +1,6 @@
 package com.psk.becalm.security;
 
+import com.psk.becalm.model.entities.RoleUserEnum;
 import com.psk.becalm.security.filter.CustomAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 
 @Configuration
 @EnableWebSecurity
@@ -32,8 +34,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.authorizeRequests().antMatchers("/auth/**").permitAll();
+        http.formLogin().loginPage("/auth/login");
+        http.authorizeRequests().anyRequest().hasRole(RoleUserEnum.USER.toString());
         http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
-        //  http.csrf().disable().authorizeRequests().anyRequest().permitAll();
     }
 
     @Bean

@@ -6,6 +6,7 @@ import com.psk.becalm.model.entities.RoleUserEnum;
 import com.psk.becalm.model.repository.RoleRepository;
 import com.psk.becalm.model.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,8 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
-import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService, UserDetailsService {
@@ -28,11 +29,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<AppUser> userOptional = userRepository.findByEmail(email);
+        AppUser appUser = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Cannot find user with email: " + email));
 
-        AppUser user = userOptional.orElseThrow(() -> new RuntimeException("sda"));
-
-        return new User(user.getEmail(), user.getPassword(), Collections.singleton(new SimpleGrantedAuthority(user.getRole().getRole().toString())));
+        return new User(appUser.getEmail(), appUser.getPassword(), Collections.singleton(new SimpleGrantedAuthority(appUser.getUserRole().getRole().toString())));
     }
 
     @Override
@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public void addRoleToUser(String email, String roleName) throws Exception {
         AppUser user = userRepository.findByEmail(email).orElseThrow(() -> new Exception("User not found"));
         Role role = roleRepository.findByRole(RoleUserEnum.valueOf(roleName));
-        user.setRole(role);
+        user.setUserRole(role);
     }
 
     @Override
