@@ -5,16 +5,19 @@ import com.psk.becalm.model.entities.Role;
 import com.psk.becalm.model.entities.RoleUserEnum;
 import com.psk.becalm.transport.dto.model.AppUserDto;
 
+import java.util.Set;
+
 
 public class AppUserConverter extends DtoConverter<AppUser, AppUserDto> {
 
     @Override
     protected AppUser convertToEntity(AppUserDto appUserDto) {
         return AppUser.builder()
-                .userRole(new Role(RoleUserEnum.valueOf(appUserDto.getRole())))
+                .userRole(Set.of(new Role(RoleUserEnum.USER)))
+                .username(appUserDto.getUsername())
                 .email(appUserDto.getEmail())
                 .password(appUserDto.getPassword())
-                .name(appUserDto.getName())
+                .firstName(appUserDto.getFirstName())
                 .surname(appUserDto.getSurname())
                 .build();
     }
@@ -22,10 +25,10 @@ public class AppUserConverter extends DtoConverter<AppUser, AppUserDto> {
     @Override
     protected AppUserDto convertToDto(AppUser appUser) {
         return AppUserDto.builder()
+                .firstName(appUser.getFirstName())
                 .email(appUser.getEmail())
-                .name(appUser.getName())
+                .username(appUser.getUsername())
                 .password(appUser.getPassword())
-                .role(appUser.getUserRole().toString())
                 .build();
     }
 

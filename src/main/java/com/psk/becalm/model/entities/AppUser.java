@@ -3,6 +3,7 @@ package com.psk.becalm.model.entities;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -11,13 +12,22 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Builder
 public class AppUser {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long userId;
-    private String name;
+
+    private String firstName;
+
+    @Column(unique = true)
+    private String username;
+
     private String surname;
+
     private String password;
+
     private String email;
-    @ManyToOne
-    private Role userRole;
+
+    @OneToMany(mappedBy = "roleId")
+    private Set<Role> userRole;
 }

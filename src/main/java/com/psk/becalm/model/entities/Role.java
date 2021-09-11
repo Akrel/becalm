@@ -11,9 +11,10 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 public class Role {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int roleId;
 
     @Enumerated(EnumType.STRING)
     private RoleUserEnum role;
