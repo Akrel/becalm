@@ -13,6 +13,7 @@ import com.psk.becalm.transport.dto.response.JwtOfResponse;
 import com.psk.becalm.transport.dto.response.MessageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -48,7 +49,7 @@ public class UserApi {
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody AppUserDto appUserDto) {
-        if (userRepository.existsByUsername(appUserDto.getEmail()))
+        if (userRepository.existsByUsername(appUserDto.getUsername()) && userRepository.existsByEmail(appUserDto.getEmail()))
             return ResponseEntity.badRequest()
                     .body(MessageResponse.of("Username is already taken"));
 
