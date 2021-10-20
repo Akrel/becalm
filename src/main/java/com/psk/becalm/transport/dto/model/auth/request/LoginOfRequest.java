@@ -1,4 +1,4 @@
-package com.psk.becalm.transport.dto.request;
+package com.psk.becalm.transport.dto.model.auth.request;
 
 import lombok.Getter;
 import lombok.Setter;

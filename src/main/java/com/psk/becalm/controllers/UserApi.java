@@ -1,5 +1,6 @@
 package com.psk.becalm.controllers;
 
+import com.psk.becalm.exceptions.TokenRefreshException;
 import com.psk.becalm.model.entities.AppUser;
 import com.psk.becalm.model.entities.RefreshToken;
 import com.psk.becalm.model.repository.UserRepository;
@@ -8,12 +9,13 @@ import com.psk.becalm.services.RefreshTokenService;
 import com.psk.becalm.services.UserDetailsImpl;
 import com.psk.becalm.transport.converters.AppUserConverter;
 import com.psk.becalm.transport.dto.model.AppUserDto;
-import com.psk.becalm.transport.dto.request.LoginOfRequest;
-import com.psk.becalm.transport.dto.response.JwtOfResponse;
+import com.psk.becalm.transport.dto.model.auth.request.LoginOfRequest;
+import com.psk.becalm.transport.dto.model.auth.request.TokenRefreshRequest;
+import com.psk.becalm.transport.dto.model.auth.response.JwtOfResponse;
+import com.psk.becalm.transport.dto.model.auth.response.JwtRefreshTokenResponse;
 import com.psk.becalm.transport.dto.response.MessageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -77,6 +79,21 @@ public class UserApi {
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getUserId());
 
         return ResponseEntity.ok(new JwtOfResponse(jwt, refreshToken.getJwtToken(), userDetails.getUserId(), userDetails.getEmail(), userDetails.getUsername(), roles));
+    }
+
+    @PostMapping("/refreshtoken")
+    public ResponseEntity<?> refreshtoken(@Valid @RequestBody TokenRefreshRequest request) {
+        String requestRefreshToken = request.getRefreshToken();
+
+        return refreshTokenService.findByToken(requestRefreshToken)
+                .map(refreshTokenService::verifyExpiration)
+                .map(RefreshToken::getAppUser)
+                .map(user -> {
+                    String token = jwtUil.generateTokenFromUsername(user.getUsername());
+                    return ResponseEntity.ok(new JwtRefreshTokenResponse(token, requestRefreshToken));
+                })
+                .orElseThrow(() -> new TokenRefreshException(requestRefreshToken,
+                        "Refresh token is not in database!"));
     }
 
     @PostMapping("/logout")

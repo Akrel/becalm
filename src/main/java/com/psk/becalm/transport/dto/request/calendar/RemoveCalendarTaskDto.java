@@ -6,7 +6,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RemoveCalendarTaskDto {
-    private String userId;
-
     private String taskId;
 }

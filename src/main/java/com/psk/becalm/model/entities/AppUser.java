@@ -28,6 +28,6 @@ public class AppUser {
 
     private String email;
 
-    @OneToMany(mappedBy = "roleId")
+    @OneToMany(cascade = CascadeType.ALL)
     private Set<Role> userRole;
 }

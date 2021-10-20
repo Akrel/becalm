@@ -11,8 +11,8 @@ import java.util.UUID;
 
 @Repository
 public interface CalendarTaskRepository extends JpaRepository<CalendarTask, UUID> {
-    List<CalendarTask> findAllByAppUserAndStartDate_Month(AppUser appUser, int startDate_month);
+    List<CalendarTask> findAllByAppUser(AppUser appUser);
 
 
-    Optional<CalendarTask> findByIdAndAppUser(UUID uuid,AppUser appUser);
+    Optional<CalendarTask> findByTaskIdAndAppUser(UUID uuid, AppUser appUser);
 }

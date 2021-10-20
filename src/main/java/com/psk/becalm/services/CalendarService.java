@@ -4,8 +4,7 @@ import com.psk.becalm.model.entities.AppUser;
 import com.psk.becalm.model.entities.CalendarTask;
 import com.psk.becalm.model.repository.CalendarTaskRepository;
 import com.psk.becalm.transport.converters.CalendarTaskConverter;
-import com.psk.becalm.transport.dto.request.calendar.AddCalendarTaskDto;
-import com.psk.becalm.transport.dto.request.calendar.RemoveCalendarTaskDto;
+import com.psk.becalm.transport.dto.request.calendar.CalendarTaskDto;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,9 +20,9 @@ public class CalendarService {
     private AppUserService appUserService;
 
     @SneakyThrows
-    public CalendarTask addTaskForUser(AddCalendarTaskDto addCalendarTaskRequest) {
+    public CalendarTask addTaskForUser(CalendarTaskDto addCalendarTaskRequest, Long userId) {
 
-        AppUser appUserById = appUserService.getAppUserById(addCalendarTaskRequest.getUserId());
+        AppUser appUserById = appUserService.getAppUserById(userId);
 
         CalendarTask calendarTask = CalendarTaskConverter.toEntity(addCalendarTaskRequest);
         calendarTask.setAppUser(appUserById);
@@ -31,22 +30,20 @@ public class CalendarService {
         return calendarTaskRepository.save(calendarTask);
     }
 
+    public void removeUserTask(String taskUuid, Long userId) throws UserException {
+        AppUser appUserById = appUserService.getAppUserById(userId);
 
-    @SneakyThrows
-    public void removeUserTask(RemoveCalendarTaskDto removeCalendarTaskDto) {
-        AppUser appUserById = appUserService.getAppUserById(removeCalendarTaskDto.getUserId());
+        calendarTaskRepository.findByTaskIdAndAppUser(UUID.fromString(taskUuid), appUserById).
+                orElseThrow(() -> new UserException(String.format("Cannot find calendar task with id %s", taskUuid)));
 
-        calendarTaskRepository.findByIdAndAppUser(UUID.fromString(removeCalendarTaskDto.getTaskId()), appUserById).
-                orElseThrow(() -> new UserException(String.format("Cannot find calendar task with id %s", removeCalendarTaskDto.getTaskId())));
-
-        calendarTaskRepository.deleteById(UUID.fromString(removeCalendarTaskDto.getTaskId()));
+        calendarTaskRepository.deleteById(UUID.fromString(taskUuid));
     }
 
     @SneakyThrows
-    public List<CalendarTask> findCalendarTaskInMonth(Long idUser, String month) {
+    public List<CalendarTask> findCalendarTaskInMonth(Long idUser, int month) {
         AppUser appUserById = appUserService.getAppUserById(idUser);
 
-        return calendarTaskRepository.findAllByAppUserAndStartDate_Month(appUserById, Integer.getInteger(month));
+        return calendarTaskRepository.findAllByAppUser(appUserById);
     }
 
 }

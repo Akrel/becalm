@@ -1,4 +1,4 @@
-package com.psk.becalm;
+package com.psk.becalm.exceptions;
 
 public class UserAuthenticationException extends RuntimeException {
     public UserAuthenticationException(String message) {

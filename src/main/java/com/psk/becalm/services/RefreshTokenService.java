@@ -1,6 +1,6 @@
 package com.psk.becalm.services;
 
-import com.psk.becalm.UserAuthenticationException;
+import com.psk.becalm.exceptions.UserAuthenticationException;
 import com.psk.becalm.model.entities.RefreshToken;
 import com.psk.becalm.model.repository.RefreshTokenRepository;
 import com.psk.becalm.model.repository.UserRepository;
@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class RefreshTokenService {
@@ -27,7 +29,9 @@ public class RefreshTokenService {
 
 
     public Optional<RefreshToken> findByToken(String jwtToken) {
-        return refreshTokenRepository.findByJwtToken(jwtToken);
+        List<RefreshToken> all = refreshTokenRepository.findAll().stream().filter(refreshToken -> refreshToken.getJwtToken().equals("d4011dbd-5b38-4f1a-af73-d42f878bf0e5")).collect(Collectors.toList());
+        Optional<RefreshToken> byJwtToken = refreshTokenRepository.findByJwtToken(jwtToken);
+        return byJwtToken;
     }
 
     public RefreshToken createRefreshToken(Long userUuid) {
