@@ -1,10 +1,12 @@
-package com.psk.becalm.transport.dto.request.calendar;
+package com.psk.becalm.transport.dto.calendar;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 @Setter
 @Getter
+@Accessors(fluent = true, chain = true)
 public class CalendarTaskDto {
 
     private String name;

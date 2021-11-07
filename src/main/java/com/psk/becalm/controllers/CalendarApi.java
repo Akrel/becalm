@@ -1,11 +1,11 @@
 package com.psk.becalm.controllers;
 
+import com.psk.becalm.exceptions.UserException;
 import com.psk.becalm.model.entities.CalendarTask;
 import com.psk.becalm.services.CalendarService;
 import com.psk.becalm.services.UserDetailsImpl;
-import com.psk.becalm.services.UserException;
 import com.psk.becalm.transport.converters.CalendarTaskConverter;
-import com.psk.becalm.transport.dto.request.calendar.CalendarTaskDto;
+import com.psk.becalm.transport.dto.calendar.CalendarTaskDto;
 import com.psk.becalm.transport.dto.response.MessageResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +48,21 @@ public class CalendarApi {
 
         return ResponseEntity.ok(calendarTask);
     }
+
+
+    @PutMapping("/editTask")
+    public ResponseEntity<?> editTask(@RequestBody CalendarTaskDto taskDto) {
+        UserDetailsImpl principal = getPrincipal();
+
+        CalendarTask calendarTask = calendarService.editCalendarTask(taskDto, principal.getUserId());
+
+        if (calendarTask == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new MessageResponse("Cannot add task"));
+
+        return ResponseEntity.ok(calendarTask);
+    }
+
 
     @DeleteMapping("/removeTask/{taskUuid}")
     public ResponseEntity<?> removeTask(@PathVariable String taskUuid) {

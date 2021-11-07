@@ -1,5 +1,6 @@
 package com.psk.becalm.services;
 
+import com.psk.becalm.exceptions.UserException;
 import com.psk.becalm.model.entities.AppUser;
 import com.psk.becalm.model.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

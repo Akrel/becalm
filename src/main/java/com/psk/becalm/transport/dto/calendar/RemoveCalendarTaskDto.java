@@ -1,4 +1,4 @@
-package com.psk.becalm.transport.dto.request.calendar;
+package com.psk.becalm.transport.dto.calendar;
 
 import lombok.Getter;
 import lombok.Setter;

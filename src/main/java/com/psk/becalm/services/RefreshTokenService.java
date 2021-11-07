@@ -10,10 +10,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.Instant;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class RefreshTokenService {
@@ -29,9 +27,7 @@ public class RefreshTokenService {
 
 
     public Optional<RefreshToken> findByToken(String jwtToken) {
-        List<RefreshToken> all = refreshTokenRepository.findAll().stream().filter(refreshToken -> refreshToken.getJwtToken().equals("d4011dbd-5b38-4f1a-af73-d42f878bf0e5")).collect(Collectors.toList());
-        Optional<RefreshToken> byJwtToken = refreshTokenRepository.findByJwtToken(jwtToken);
-        return byJwtToken;
+         return refreshTokenRepository.findByJwtToken(jwtToken);
     }
 
     public RefreshToken createRefreshToken(Long userUuid) {

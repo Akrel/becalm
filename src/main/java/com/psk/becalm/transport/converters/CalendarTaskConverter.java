@@ -1,7 +1,7 @@
 package com.psk.becalm.transport.converters;
 
 import com.psk.becalm.model.entities.CalendarTask;
-import com.psk.becalm.transport.dto.request.calendar.CalendarTaskDto;
+import com.psk.becalm.transport.dto.calendar.CalendarTaskDto;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,31 +18,31 @@ public class CalendarTaskConverter extends DtoConverter<CalendarTask, CalendarTa
     @Override
     protected CalendarTask convertToEntity(CalendarTaskDto addCalendarTaskRequest) {
 
-
-        LocalDateTime endTime = addCalendarTaskRequest.getEnd() == null ? null : ZonedDateTime.parse(addCalendarTaskRequest.getEnd()).toLocalDateTime();
-
-        LocalDateTime startTime = ZonedDateTime.parse(addCalendarTaskRequest.getStart()).toLocalDateTime();
+        LocalDateTime endTime = addCalendarTaskRequest.end() == null ? null : ZonedDateTime.parse(addCalendarTaskRequest.end()).toLocalDateTime();
+        LocalDateTime startTime = ZonedDateTime.parse(addCalendarTaskRequest.start()).toLocalDateTime();
 
         CalendarTask calendarTask = new CalendarTask();
-        calendarTask.setColor(addCalendarTaskRequest.getColor());
+        calendarTask.setColor(addCalendarTaskRequest.color());
         calendarTask.setEndDate(endTime);
         calendarTask.setStartDate(startTime);
-        calendarTask.setDescription(addCalendarTaskRequest.getDescription());
-        calendarTask.setTittle(addCalendarTaskRequest.getName());
-        calendarTask.setAllDay(addCalendarTaskRequest.isAllDay());
+        calendarTask.setDescription(addCalendarTaskRequest.description());
+        calendarTask.setTittle(addCalendarTaskRequest.name());
+        calendarTask.setAllDay(addCalendarTaskRequest.allDay());
         return calendarTask;
     }
 
     @Override
     protected CalendarTaskDto convertToDto(CalendarTask calendarTask) {
         CalendarTaskDto addCalendarTaskDto = new CalendarTaskDto();
-        addCalendarTaskDto.setAllDay(calendarTask.isAllDay());
-        addCalendarTaskDto.setName(calendarTask.getTittle());
-        addCalendarTaskDto.setEnd(calendarTask.getEndDate() != null ? calendarTask.getEndDate().format(dateFormat) : "");
-        addCalendarTaskDto.setStart(calendarTask.getStartDate().format(dateFormat));
-        addCalendarTaskDto.setColor(calendarTask.getColor());
-        addCalendarTaskDto.setDescription(calendarTask.getDescription());
-        addCalendarTaskDto.setTaskUuid(calendarTask.getTaskId().toString());
+
+        addCalendarTaskDto.allDay(calendarTask.isAllDay())
+                .name(calendarTask.getTittle())
+                .end(calendarTask.getEndDate() != null ? calendarTask.getEndDate().format(dateFormat) : "")
+                .start(calendarTask.getStartDate().format(dateFormat))
+                .color(calendarTask.getColor())
+                .description(calendarTask.getDescription())
+                .taskUuid(calendarTask.getTaskId().toString());
+
         return addCalendarTaskDto;
     }
 
