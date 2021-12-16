@@ -46,7 +46,7 @@ public class CalendarService {
         CalendarTask calendarTask = CalendarTaskConverter.toEntity(taskDto);
         AppUser appUserById = appUserService.getAppUserById(userID);
         calendarTask.setAppUser(appUserById);
-        calendarTask.setTaskId(UUID.fromString(taskDto.taskUuid()));
+        calendarTask.setTaskId(UUID.fromString(taskDto.getTaskUuid()));
         return calendarTaskRepository.save(calendarTask);
     }
 

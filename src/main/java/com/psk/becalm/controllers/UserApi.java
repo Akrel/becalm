@@ -9,7 +9,7 @@ import com.psk.becalm.services.RefreshTokenService;
 import com.psk.becalm.services.UserDetailsImpl;
 import com.psk.becalm.transport.converters.AppUserConverter;
 import com.psk.becalm.transport.dto.model.AppUserDto;
-import com.psk.becalm.transport.dto.model.auth.request.LoginOfRequest;
+import com.psk.becalm.transport.dto.model.auth.request.RequestLogin;
 import com.psk.becalm.transport.dto.model.auth.request.TokenRefreshRequest;
 import com.psk.becalm.transport.dto.model.auth.response.JwtOfResponse;
 import com.psk.becalm.transport.dto.model.auth.response.JwtRefreshTokenResponse;
@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/auth", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.TEXT_PLAIN_VALUE})
 @RequiredArgsConstructor
 public class UserApi {
+
     @Autowired
     private final UserRepository userRepository;
 
@@ -63,7 +64,7 @@ public class UserApi {
 
 
     @PostMapping("/signin")
-    public ResponseEntity<?> loginUser(@Valid @RequestBody LoginOfRequest loginRequest) {
+    public ResponseEntity<?> loginUser(@Valid @RequestBody RequestLogin loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 

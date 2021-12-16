@@ -6,7 +6,7 @@ import lombok.experimental.Accessors;
 
 @Setter
 @Getter
-@Accessors(fluent = true, chain = true)
+@Accessors(chain = true)
 public class CalendarTaskDto {
 
     private String name;

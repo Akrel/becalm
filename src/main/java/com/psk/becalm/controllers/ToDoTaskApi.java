@@ -8,17 +8,17 @@ import com.psk.becalm.transport.dto.response.MessageResponse;
 import com.psk.becalm.transport.dto.todo.ToDoTaskDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@Secured("USER")
+
 @Slf4j
-@RequestMapping(value = "/todoTask")
+@RequestMapping(value = "/todoTask", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.TEXT_PLAIN_VALUE})
 public class ToDoTaskApi {
 
     @Autowired
@@ -33,28 +33,36 @@ public class ToDoTaskApi {
     }
 
     @DeleteMapping("/remove/{taskTodoUuid}")
-    public ResponseEntity<?> removeTask(@RequestParam String taskUUid) {
+    public ResponseEntity<?> removeTask(@PathVariable String taskTodoUuid) {
         UserDetailsImpl principal = getPrincipal();
 
-        try {
-            toDoService.removeToDoTask(principal.getUserId(), taskUUid);
-            return ResponseEntity.ok().body(MessageResponse.of("Task has been removed"));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+        toDoService.removeToDoTask(principal.getUserId(), taskTodoUuid);
+        return ResponseEntity.ok().body(MessageResponse.of("Task has been removed"));
     }
 
 
     @PutMapping("/addNew")
-    public ResponseEntity<?> addNewTask(@RequestParam ToDoTaskDto taskDto) {
+    public ResponseEntity<ToDoTaskDto> addNewTask(@RequestBody ToDoTaskDto toDoTaskDto) {
         UserDetailsImpl principal = getPrincipal();
-        try {
-            ToDoTask toDoTask = toDoService.addNewTodoTask(principal.getUserId(), taskDto);
-            return ResponseEntity.ok().body(TodoTaskConverter.toDto(toDoTask));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+
+        ToDoTask toDoTask = toDoService.addNewTodoTask(principal.getUserId(), toDoTaskDto);
+        return ResponseEntity.ok().body(TodoTaskConverter.toDto(toDoTask));
     }
+
+    @PutMapping("/toogleTask/{taskTodoUuid}")
+    public ResponseEntity<ToDoTask> toogleTask(@PathVariable String taskTodoUuid) {
+        UserDetailsImpl principal = getPrincipal();
+        ToDoTask toDoTask = toDoService.toogleTaskTodo(principal.getUserId(), taskTodoUuid);
+        return ResponseEntity.ok().body(toDoTask);
+    }
+
+    @PutMapping("/editTodo")
+    public ResponseEntity<ToDoTask> editTask(@RequestBody ToDoTaskDto toDoTaskDto) {
+
+        ToDoTask toDoTask = toDoService.editTodoTask(toDoTaskDto);
+        return ResponseEntity.ok().body(toDoTask);
+    }
+
 
     private UserDetailsImpl getPrincipal() {
         return (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

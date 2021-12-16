@@ -18,16 +18,16 @@ public class CalendarTaskConverter extends DtoConverter<CalendarTask, CalendarTa
     @Override
     protected CalendarTask convertToEntity(CalendarTaskDto addCalendarTaskRequest) {
 
-        LocalDateTime endTime = addCalendarTaskRequest.end() == null ? null : ZonedDateTime.parse(addCalendarTaskRequest.end()).toLocalDateTime();
-        LocalDateTime startTime = ZonedDateTime.parse(addCalendarTaskRequest.start()).toLocalDateTime();
+        LocalDateTime endTime = addCalendarTaskRequest.getEnd() == null ? null : ZonedDateTime.parse(addCalendarTaskRequest.getEnd()).toLocalDateTime();
+        LocalDateTime startTime = ZonedDateTime.parse(addCalendarTaskRequest.getStart()).toLocalDateTime();
 
         CalendarTask calendarTask = new CalendarTask();
-        calendarTask.setColor(addCalendarTaskRequest.color());
+        calendarTask.setColor(addCalendarTaskRequest.getColor());
         calendarTask.setEndDate(endTime);
         calendarTask.setStartDate(startTime);
-        calendarTask.setDescription(addCalendarTaskRequest.description());
-        calendarTask.setTittle(addCalendarTaskRequest.name());
-        calendarTask.setAllDay(addCalendarTaskRequest.allDay());
+        calendarTask.setDescription(addCalendarTaskRequest.getDescription());
+        calendarTask.setTittle(addCalendarTaskRequest.getName());
+        calendarTask.setAllDay(addCalendarTaskRequest.isAllDay());
         return calendarTask;
     }
 
@@ -35,13 +35,13 @@ public class CalendarTaskConverter extends DtoConverter<CalendarTask, CalendarTa
     protected CalendarTaskDto convertToDto(CalendarTask calendarTask) {
         CalendarTaskDto addCalendarTaskDto = new CalendarTaskDto();
 
-        addCalendarTaskDto.allDay(calendarTask.isAllDay())
-                .name(calendarTask.getTittle())
-                .end(calendarTask.getEndDate() != null ? calendarTask.getEndDate().format(dateFormat) : "")
-                .start(calendarTask.getStartDate().format(dateFormat))
-                .color(calendarTask.getColor())
-                .description(calendarTask.getDescription())
-                .taskUuid(calendarTask.getTaskId().toString());
+        addCalendarTaskDto.setAllDay(calendarTask.isAllDay())
+                .setName(calendarTask.getTittle())
+                .setEnd(calendarTask.getEndDate() != null ? calendarTask.getEndDate().format(dateFormat) : "")
+                .setStart(calendarTask.getStartDate().format(dateFormat))
+                .setColor(calendarTask.getColor())
+                .setDescription(calendarTask.getDescription())
+                .setTaskUuid(calendarTask.getTaskId().toString());
 
         return addCalendarTaskDto;
     }

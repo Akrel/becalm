@@ -47,12 +47,14 @@ public class ToDoService {
 
     @SneakyThrows
     public ToDoTask editTodoTask(ToDoTaskDto taskDto) {
-        boolean taskExists = toDoTaskRepository.existsById(UUID.fromString(taskDto.uid()));
+        ToDoTask taskExists = toDoTaskRepository.getById(UUID.fromString(taskDto.getUid()));
 
-        if (!taskExists)
-            throw new UserException(String.format("Cannot find todo task with id %s", taskDto.uid()));
+        if (taskExists == null)
+            throw new UserException(String.format("Cannot find todo task with id %s", taskDto.getUid()));
 
         ToDoTask toDoTask = TodoTaskConverter.toEntity(taskDto);
+        toDoTask.setAppUser(taskExists.getAppUser());
+
         return toDoTaskRepository.save(toDoTask);
     }
 
@@ -64,5 +66,17 @@ public class ToDoService {
         ToDoTask toDoTask = byId.orElseThrow(() -> new UserException(String.format("Cannot find todo task with id %s", taskUUid)));
         toDoTaskRepository.delete(toDoTask);
     }
+
+    @SneakyThrows
+    public ToDoTask toogleTaskTodo(Long appUserId, String taskUUid) {
+        AppUser appUser = appUserService.getAppUserById(appUserId);
+        Optional<ToDoTask> optionalToDoTask = toDoTaskRepository.findToDoTaskByAppUserAndTaskId(appUser, UUID.fromString(taskUUid));
+
+        ToDoTask toDoTask = optionalToDoTask
+                .orElseThrow(() -> new UserException(String.format("Cannot find todo task with id %s", taskUUid)));
+        toDoTask.setDone(!toDoTask.isDone());
+        return toDoTaskRepository.save(toDoTask);
+    }
+
 
 }

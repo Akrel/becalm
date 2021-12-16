@@ -8,8 +8,8 @@ public class TodoTaskConverter extends DtoConverter<ToDoTask, ToDoTaskDto> {
     protected ToDoTask convertToEntity(ToDoTaskDto toDoTaskDto) {
 
         ToDoTask toDoTask = new ToDoTask();
-        toDoTask.setDescription(toDoTaskDto.text());
-        toDoTask.setDone(toDoTaskDto.done());
+        toDoTask.setDescription(toDoTaskDto.getText());
+        toDoTask.setDone(toDoTaskDto.isDone());
         return toDoTask;
     }
 
@@ -17,9 +17,9 @@ public class TodoTaskConverter extends DtoConverter<ToDoTask, ToDoTaskDto> {
     protected ToDoTaskDto convertToDto(ToDoTask toDoTask) {
 
         return new ToDoTaskDto()
-                .done(toDoTask.isDone())
-                .uid(toDoTask.getTaskId().toString())
-                .text(toDoTask.getDescription());
+                .setDone(toDoTask.isDone())
+                .setUid(toDoTask.getTaskId().toString())
+                .setText(toDoTask.getDescription());
     }
 
 

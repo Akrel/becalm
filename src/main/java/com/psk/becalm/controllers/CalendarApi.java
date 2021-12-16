@@ -10,9 +10,11 @@ import com.psk.becalm.transport.dto.response.MessageResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,30 +23,31 @@ import java.util.stream.Collectors;
 @RestController
 @Secured("USER")
 @Slf4j
-@RequestMapping(value = "/calendar")
+@RequestMapping(value = "/calendar", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.TEXT_PLAIN_VALUE})
 public class CalendarApi {
     @Autowired
     private CalendarService calendarService;
 
 
     @GetMapping("allInMonth/{month}")
-    public ResponseEntity<?> getAllTaskInMonth(@PathVariable String month) {
+    public ResponseEntity<List<CalendarTaskDto>> getAllTaskInMonth(@PathVariable String month) {
         UserDetailsImpl principal = getPrincipal();
         log.info(String.format("User %s load task in month %s", principal.getUsername(), month));
         List<CalendarTask> calendarTaskInMonth = calendarService.findCalendarTaskInMonth(principal.getUserId(), Integer.parseInt(month));
+        if (!CollectionUtils.isEmpty(calendarTaskInMonth))
+            return ResponseEntity.ok(calendarTaskInMonth.stream().map(CalendarTaskConverter::toDto).collect(Collectors.toList()));
 
-        return ResponseEntity.ok(calendarTaskInMonth.stream().map(CalendarTaskConverter::toDto).collect(Collectors.toList()));
+        return ResponseEntity.badRequest().build();
     }
 
-    @PutMapping("/addNewTask")
-    public ResponseEntity<?> addNewTask(@RequestBody CalendarTaskDto taskDto) {
+    @PostMapping("/addNewTask")
+    public ResponseEntity<CalendarTask> addNewTask(@RequestBody CalendarTaskDto taskDto) {
         UserDetailsImpl principal = getPrincipal();
 
         CalendarTask calendarTask = calendarService.addTaskForUser(taskDto, principal.getUserId());
 
         if (calendarTask == null)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new MessageResponse("Cannot add task"));
+            return ResponseEntity.badRequest().build();
 
         return ResponseEntity.ok(calendarTask);
     }
