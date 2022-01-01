@@ -24,8 +24,9 @@ public class ToDoService {
     private AppUserService appUserService;
 
     @Autowired
-    public ToDoService(ToDoTaskRepository toDoTaskRepository) {
+    public ToDoService(AppUserService appUserService, ToDoTaskRepository toDoTaskRepository) {
         this.toDoTaskRepository = toDoTaskRepository;
+        this.appUserService = appUserService;
     }
 
     @SneakyThrows
@@ -49,10 +50,8 @@ public class ToDoService {
     public ToDoTask editTodoTask(ToDoTaskDto taskDto) {
         ToDoTask taskExists = toDoTaskRepository.getById(UUID.fromString(taskDto.getUid()));
 
-        if (taskExists == null)
-            throw new UserException(String.format("Cannot find todo task with id %s", taskDto.getUid()));
-
         ToDoTask toDoTask = TodoTaskConverter.toEntity(taskDto);
+        toDoTask.setTaskId(taskExists.getTaskId());
         toDoTask.setAppUser(taskExists.getAppUser());
 
         return toDoTaskRepository.save(toDoTask);

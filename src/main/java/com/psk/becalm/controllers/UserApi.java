@@ -35,20 +35,29 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserApi {
 
-    @Autowired
+
     private final UserRepository userRepository;
 
-    @Autowired
+
     private final AuthenticationManager authenticationManager;
 
-    @Autowired
+
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
+
     private final RefreshTokenService refreshTokenService;
 
-    @Autowired
+
     private JwtUtils jwtUil;
+
+    @Autowired
+    public UserApi(UserRepository userRepository, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, RefreshTokenService refreshTokenService, JwtUtils jwtUil) {
+        this.userRepository = userRepository;
+        this.authenticationManager = authenticationManager;
+        this.passwordEncoder = passwordEncoder;
+        this.refreshTokenService = refreshTokenService;
+        this.jwtUil = jwtUil;
+    }
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody AppUserDto appUserDto) {

@@ -50,7 +50,7 @@ public class ToDoTaskApi {
     }
 
     @PutMapping("/toogleTask/{taskTodoUuid}")
-    public ResponseEntity<ToDoTask> toogleTask(@PathVariable String taskTodoUuid) {
+    public ResponseEntity<ToDoTask> toggleTask(@PathVariable String taskTodoUuid) {
         UserDetailsImpl principal = getPrincipal();
         ToDoTask toDoTask = toDoService.toogleTaskTodo(principal.getUserId(), taskTodoUuid);
         return ResponseEntity.ok().body(toDoTask);

@@ -6,6 +6,7 @@ import com.psk.becalm.model.entities.CalendarTask;
 import com.psk.becalm.model.repository.CalendarTaskRepository;
 import com.psk.becalm.transport.converters.CalendarTaskConverter;
 import com.psk.becalm.transport.dto.calendar.CalendarTaskDto;
+import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class CalendarService {
     @Autowired
     private CalendarTaskRepository calendarTaskRepository;
@@ -34,8 +36,8 @@ public class CalendarService {
 
     public void removeUserTask(String taskUuid, Long userId) throws UserException {
         AppUser appUserById = appUserService.getAppUserById(userId);
-
-        calendarTaskRepository.findByTaskIdAndAppUser(UUID.fromString(taskUuid), appUserById).
+        UUID uuid = UUID.fromString(taskUuid);
+        CalendarTask calendarTask = calendarTaskRepository.findByTaskIdAndAppUser(uuid, appUserById).
                 orElseThrow(() -> new UserException(String.format("Cannot find calendar task with id %s", taskUuid)));
 
         calendarTaskRepository.deleteById(UUID.fromString(taskUuid));
@@ -45,8 +47,12 @@ public class CalendarService {
     public CalendarTask editCalendarTask(CalendarTaskDto taskDto, Long userID) {
         CalendarTask calendarTask = CalendarTaskConverter.toEntity(taskDto);
         AppUser appUserById = appUserService.getAppUserById(userID);
+        UUID uuid = UUID.fromString(taskDto.getTaskUuid());
+        CalendarTask foundedTask = calendarTaskRepository.findByTaskIdAndAppUser(uuid, appUserById).
+                orElseThrow(() -> new UserException(String.format("Cannot find calendar task with id %s", uuid)));
+
         calendarTask.setAppUser(appUserById);
-        calendarTask.setTaskId(UUID.fromString(taskDto.getTaskUuid()));
+        calendarTask.setTaskId(foundedTask.getTaskId());
         return calendarTaskRepository.save(calendarTask);
     }
 

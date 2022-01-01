@@ -3,15 +3,21 @@ package com.psk.becalm.services;
 import com.psk.becalm.exceptions.UserException;
 import com.psk.becalm.model.entities.AppUser;
 import com.psk.becalm.model.repository.UserRepository;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@NoArgsConstructor
 public class AppUserService {
     @Autowired
     private UserRepository userRepository;
+
+    public AppUserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public AppUser getAppUserById(String userId) throws UserException {
         return getAppUserById(Long.valueOf(userId));

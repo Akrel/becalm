@@ -9,4 +9,5 @@ public class BecalmApplication {
         SpringApplication.run(BecalmApplication.class, args);
 
     }
+
 }
