@@ -8,7 +8,6 @@ import com.psk.becalm.transport.dto.response.MessageResponse;
 import com.psk.becalm.transport.dto.todo.ToDoTaskDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +17,7 @@ import java.util.List;
 @RestController
 
 @Slf4j
-@RequestMapping(value = "/todoTask", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.TEXT_PLAIN_VALUE})
+@RequestMapping(value = "/todoTask")
 public class ToDoTaskApi {
 
     @Autowired
