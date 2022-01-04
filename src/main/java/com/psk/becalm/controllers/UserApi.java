@@ -15,7 +15,6 @@ import com.psk.becalm.transport.dto.model.auth.response.JwtOfResponse;
 import com.psk.becalm.transport.dto.model.auth.response.JwtRefreshTokenResponse;
 import com.psk.becalm.transport.dto.response.MessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,7 +32,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(value = "/auth", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.TEXT_PLAIN_VALUE})
+@RequestMapping(value = "/auth")
 public class UserApi {
 
     private final UserRepository userRepository;
