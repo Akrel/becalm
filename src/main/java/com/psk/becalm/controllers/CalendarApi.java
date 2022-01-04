@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @RestController
 @Secured("USER")
 @Slf4j
-@RequestMapping(value = "/calendar", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.TEXT_PLAIN_VALUE})
+@RequestMapping(value = "/calendar", produces = {MediaType.APPLICATION_JSON_VALUE})
 public class CalendarApi {
     @Autowired
     private CalendarService calendarService;

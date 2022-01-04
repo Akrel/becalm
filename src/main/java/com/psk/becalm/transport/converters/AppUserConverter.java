@@ -21,7 +21,6 @@ public class AppUserConverter extends DtoConverter<AppUser, AppUserDto> {
                 .surname(appUserDto.getSurname())
                 .build();
     }
-
     @Override
     protected AppUserDto convertToDto(AppUser appUser) {
         return AppUserDto.builder()
@@ -31,8 +30,6 @@ public class AppUserConverter extends DtoConverter<AppUser, AppUserDto> {
                 .password(appUser.getPassword())
                 .build();
     }
-
-
     public static AppUserDto toDto(AppUser appUser) {
         return new AppUserConverter().convertToDto(appUser);
     }

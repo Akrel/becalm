@@ -14,7 +14,6 @@ import com.psk.becalm.transport.dto.model.auth.request.TokenRefreshRequest;
 import com.psk.becalm.transport.dto.model.auth.response.JwtOfResponse;
 import com.psk.becalm.transport.dto.model.auth.response.JwtRefreshTokenResponse;
 import com.psk.becalm.transport.dto.response.MessageResponse;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,31 +23,24 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(value = "/auth", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.TEXT_PLAIN_VALUE})
-@RequiredArgsConstructor
+@RequestMapping(value = "/auth", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.TEXT_PLAIN_VALUE})
 public class UserApi {
 
-
     private final UserRepository userRepository;
-
-
     private final AuthenticationManager authenticationManager;
-
-
     private final PasswordEncoder passwordEncoder;
-
-
     private final RefreshTokenService refreshTokenService;
-
-
-    private JwtUtils jwtUil;
+    private final JwtUtils jwtUil;
 
     @Autowired
     public UserApi(UserRepository userRepository, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, RefreshTokenService refreshTokenService, JwtUtils jwtUil) {
