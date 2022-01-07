@@ -6,7 +6,6 @@ import com.psk.becalm.services.UserDetailsImpl;
 import com.psk.becalm.transport.converters.TodoTaskConverter;
 import com.psk.becalm.transport.dto.response.MessageResponse;
 import com.psk.becalm.transport.dto.todo.ToDoTaskDto;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,8 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-
-@Slf4j
 @RequestMapping(value = "/todoTask")
 public class ToDoTaskApi {
 
@@ -51,7 +48,7 @@ public class ToDoTaskApi {
     @PutMapping("/toogleTask/{taskTodoUuid}")
     public ResponseEntity<ToDoTask> toggleTask(@PathVariable String taskTodoUuid) {
         UserDetailsImpl principal = getPrincipal();
-        ToDoTask toDoTask = toDoService.toogleTaskTodo(principal.getUserId(), taskTodoUuid);
+        ToDoTask toDoTask = toDoService.toggleTaskTodo(principal.getUserId(), taskTodoUuid);
         return ResponseEntity.ok().body(toDoTask);
     }
 

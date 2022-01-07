@@ -1,0 +1,11 @@
+{
+  "allDay": true,
+  "color": "red",
+  "description": "Opis zadania",
+  "end": "13-10-2022-08:00:00",
+  "name": "Nazwa zadania",
+  "start": "12-10-2022-20:12:12",
+  "taskUuid": "12"
+}
+
+

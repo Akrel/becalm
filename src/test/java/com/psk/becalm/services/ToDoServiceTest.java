@@ -105,7 +105,7 @@ class ToDoServiceTest {
 
 
         //when
-        toDoService.toogleTaskTodo(appUser.getUserId(), toDoTask.getTaskId().toString());
+        toDoService.toggleTaskTodo(appUser.getUserId(), toDoTask.getTaskId().toString());
 
         ToDoTask expectedToDoTask = new ToDoTask(false, appUser);
         expectedToDoTask.setDescription("Kupic mleko, kupic jajka");

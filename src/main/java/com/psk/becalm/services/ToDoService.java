@@ -67,7 +67,7 @@ public class ToDoService {
     }
 
     @SneakyThrows
-    public ToDoTask toogleTaskTodo(Long appUserId, String taskUUid) {
+    public ToDoTask toggleTaskTodo(Long appUserId, String taskUUid) {
         AppUser appUser = appUserService.getAppUserById(appUserId);
         Optional<ToDoTask> optionalToDoTask = toDoTaskRepository.findToDoTaskByAppUserAndTaskId(appUser, UUID.fromString(taskUUid));
 
