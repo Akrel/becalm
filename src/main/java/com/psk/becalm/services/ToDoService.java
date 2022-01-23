@@ -31,6 +31,12 @@ public class ToDoService {
 
     @SneakyThrows
     public List<ToDoTaskDto> getAllTodoTask(Long appUserId) {
+     /*   int a = 0;
+        for(int i = 0; i < 10_000_000; i++){
+                a++;
+
+        }
+        System.out.println(a);*/
         AppUser appUser = appUserService.getAppUserById(appUserId);
         return toDoTaskRepository.findToDoTaskByAppUser(appUser)
                 .stream().map(TodoTaskConverter::toDto)

@@ -13,10 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 class ToDoServiceTest {
 
@@ -109,9 +106,28 @@ class ToDoServiceTest {
 
         ToDoTask expectedToDoTask = new ToDoTask(false, appUser);
         expectedToDoTask.setDescription("Kupic mleko, kupic jajka");
-
-
     }
+
+    @Test
+    void getAllTask() throws UserException {
+        AppUser appUser = createAppUser();
+
+        ToDoTask toDoTask = new ToDoTask(true, appUser);
+        toDoTask.setDescription("Opis1");
+
+        ToDoTask toDoTask2 = new ToDoTask(true, appUser);
+        toDoTask2.setDescription("Task1");
+
+        ArrayList<ToDoTask> toDoTasks = new ArrayList<>(List.of(toDoTask, toDoTask2));
+
+
+        Mockito.when(userRepository.findById(appUser.getUserId())).thenReturn(Optional.of(appUser));
+        Mockito.when(toDoTaskRepository.findToDoTaskByAppUser(appUser)).thenReturn(toDoTasks);
+        List<ToDoTaskDto> allTodoTask = toDoService.getAllTodoTask(appUser.getUserId());
+
+        Mockito.verify(toDoTaskRepository, Mockito.times(1)).findToDoTaskByAppUser(appUser);
+    }
+
 
     private AppUser createAppUser() {
         String firstName = "Jan";

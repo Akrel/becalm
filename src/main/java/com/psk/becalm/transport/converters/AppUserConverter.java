@@ -26,6 +26,7 @@ public class AppUserConverter extends DtoConverter<AppUser, AppUserDto> {
         return AppUserDto.builder()
                 .firstName(appUser.getFirstName())
                 .email(appUser.getEmail())
+                .surname(appUser.getSurname())
                 .username(appUser.getUsername())
                 .password(appUser.getPassword())
                 .build();

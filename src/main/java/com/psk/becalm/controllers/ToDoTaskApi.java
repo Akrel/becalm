@@ -17,9 +17,12 @@ import java.util.List;
 @RequestMapping(value = "/todoTask")
 public class ToDoTaskApi {
 
-    @Autowired
     private ToDoService toDoService;
 
+    @Autowired
+    public ToDoTaskApi(ToDoService toDoService) {
+        this.toDoService = toDoService;
+    }
 
     @GetMapping("/getAll")
     public ResponseEntity<List<ToDoTaskDto>> getTasks() {
@@ -40,7 +43,6 @@ public class ToDoTaskApi {
     @PutMapping("/addNew")
     public ResponseEntity<ToDoTaskDto> addNewTask(@RequestBody ToDoTaskDto toDoTaskDto) {
         UserDetailsImpl principal = getPrincipal();
-
         ToDoTask toDoTask = toDoService.addNewTodoTask(principal.getUserId(), toDoTaskDto);
         return ResponseEntity.ok().body(TodoTaskConverter.toDto(toDoTask));
     }

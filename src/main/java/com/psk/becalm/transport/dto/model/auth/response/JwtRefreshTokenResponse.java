@@ -1,10 +1,12 @@
 package com.psk.becalm.transport.dto.model.auth.response;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
+@EqualsAndHashCode
 public class JwtRefreshTokenResponse {
 
     private String accessToken;

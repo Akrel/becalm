@@ -1,6 +1,7 @@
 package com.psk.becalm.model.entities;
 
 import lombok.*;
+import lombok.experimental.Accessors;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.Entity;
@@ -12,6 +13,7 @@ import javax.persistence.ManyToOne;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
 public class ToDoTask extends Task {
 
     @ColumnDefault(value = "false")

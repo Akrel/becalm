@@ -25,9 +25,13 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequestMapping(value = "/calendar", produces = {MediaType.APPLICATION_JSON_VALUE})
 public class CalendarApi {
-    @Autowired
+
     private CalendarService calendarService;
 
+    @Autowired
+    public CalendarApi(CalendarService calendarService) {
+        this.calendarService = calendarService;
+    }
 
     @GetMapping("allInMonth/{month}")
     public ResponseEntity<List<CalendarTaskDto>> getAllTaskInMonth(@PathVariable String month) {

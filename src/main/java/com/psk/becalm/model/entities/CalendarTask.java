@@ -1,8 +1,6 @@
 package com.psk.becalm.model.entities;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.Entity;
@@ -14,6 +12,8 @@ import java.time.LocalDateTime;
 @Setter()
 @Getter
 @EqualsAndHashCode
+@AllArgsConstructor
+@NoArgsConstructor
 public class CalendarTask extends Task {
 
     private String tittle;

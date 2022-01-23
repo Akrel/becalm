@@ -4,6 +4,7 @@ import com.psk.becalm.exceptions.UserAuthenticationException;
 import com.psk.becalm.model.entities.RefreshToken;
 import com.psk.becalm.model.repository.RefreshTokenRepository;
 import com.psk.becalm.model.repository.UserRepository;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,19 +16,23 @@ import java.util.UUID;
 
 @Service
 public class RefreshTokenService {
-
+    @Setter
     @Value("${becalm.app.jwtExpirationMs}")
     private Long refreshTokenDuration;
 
-    @Autowired
     private RefreshTokenRepository refreshTokenRepository;
 
-    @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    public RefreshTokenService(RefreshTokenRepository refreshTokenRepository, UserRepository userRepository) {
+        this.refreshTokenRepository = refreshTokenRepository;
+        this.userRepository = userRepository;
+    }
 
 
     public Optional<RefreshToken> findByToken(String jwtToken) {
-         return refreshTokenRepository.findByJwtToken(jwtToken);
+        return refreshTokenRepository.findByJwtToken(jwtToken);
     }
 
     public RefreshToken createRefreshToken(Long userUuid) {
@@ -36,10 +41,7 @@ public class RefreshTokenService {
                 .expiryDate(Instant.now().plusMillis(refreshTokenDuration))
                 .build();
 
-
-        builtRefreshToken = refreshTokenRepository.save(builtRefreshToken);
-
-        return builtRefreshToken;
+        return refreshTokenRepository.save(builtRefreshToken);
     }
 
     public RefreshToken verifyExpiration(RefreshToken refreshToken) {

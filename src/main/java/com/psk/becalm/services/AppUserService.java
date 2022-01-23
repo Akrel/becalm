@@ -12,9 +12,10 @@ import java.util.Optional;
 @Service
 @NoArgsConstructor
 public class AppUserService {
-    @Autowired
+
     private UserRepository userRepository;
 
+    @Autowired
     public AppUserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
